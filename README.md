@@ -8,7 +8,13 @@ The complete architecture, content model, build journey, quality gates, deployme
 
 - [JRSphere Developer Specification](./JRSphere-Developer-Specification.md)
 
-Implementation should begin with the decision and content gates in Sections 2 and 17 of the specification. The application has not yet been scaffolded; this repository currently holds the implementation planning baseline.
+## Project tracker
+
+Current progress, decisions, blockers, and upcoming work are recorded in:
+
+- [JRSphere project tracker](./PROJECT-TODO.md)
+
+Implementation follows the approved static HTML5, CSS3, and vanilla JavaScript architecture. The foundation and core public page sections are currently under development.
 
 ## License
 
