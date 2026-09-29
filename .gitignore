@@ -1,0 +1,16 @@
+# Local preview artifacts
+.preview/
+_site/
+
+# Test and audit reports
+coverage/
+playwright-report/
+test-results/
+.lighthouseci/
+
+# Editors and operating systems
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

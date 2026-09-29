@@ -1,0 +1,62 @@
+:root {
+  color-scheme: light dark;
+
+  --color-bg: #f7f9fc;
+  --color-surface: #ffffff;
+  --color-surface-raised: #eef4ff;
+  --color-text: #101828;
+  --color-text-muted: #475467;
+  --color-brand: #155eef;
+  --color-brand-strong: #004eeb;
+  --color-accent: #067a9b;
+  --color-border: #d0d5dd;
+  --color-focus: #ffbf47;
+  --color-on-brand: #ffffff;
+
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+
+  --step--1: clamp(0.875rem, 0.84rem + 0.12vw, 0.95rem);
+  --step-0: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+  --step-1: clamp(1.25rem, 1.1rem + 0.6vw, 1.6rem);
+  --step-2: clamp(1.6rem, 1.3rem + 1.1vw, 2.25rem);
+  --step-3: clamp(2.1rem, 1.6rem + 2vw, 3.5rem);
+  --step-4: clamp(2.7rem, 1.8rem + 3.2vw, 5rem);
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.5rem;
+  --shadow-sm: 0 1px 2px rgb(16 24 40 / 0.06);
+  --shadow-md: 0 1rem 2.5rem rgb(16 24 40 / 0.1);
+  --content-max: 75rem;
+  --text-max: 68ch;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #081120;
+    --color-surface: #101828;
+    --color-surface-raised: #16233a;
+    --color-text: #f2f4f7;
+    --color-text-muted: #b8c2d1;
+    --color-brand: #84adff;
+    --color-brand-strong: #b2ccff;
+    --color-accent: #67e3f9;
+    --color-border: #344054;
+    --color-focus: #ffbf47;
+    --color-on-brand: #081120;
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
+    --shadow-md: 0 1rem 2.5rem rgb(0 0 0 / 0.35);
+  }
+}
