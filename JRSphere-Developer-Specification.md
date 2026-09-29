@@ -1,10 +1,10 @@
 # JRSphere Website — Developer Specification and Delivery Blueprint
 
 > **Status:** Implementation-ready blueprint  
-> **Version:** 1.1.0
+> **Version:** 1.2.0
 > **Repository:** `jrspherejrs/website`
 > **Target hosting:** GitHub Pages  
-> **Primary delivery model:** Statically generated, content-led website  
+> **Primary delivery model:** Static, content-led website
 > **Quality target:** WCAG 2.2 AA, excellent Core Web Vitals, repeatable zero-touch deployment
 
 ---
@@ -35,7 +35,7 @@ Measure after launch, if privacy-respecting analytics are approved:
 - all critical pages are indexable and return successful status behavior on GitHub Pages;
 - contact links work on all supported devices;
 - no critical or serious automated accessibility findings;
-- Lighthouse mobile targets are met on the production build;
+- Lighthouse mobile targets are met on the deployed production site;
 - every deployment can be reproduced from a tagged commit and rolled back through GitHub.
 
 ### 1.3 Non-goals for version 1
@@ -62,7 +62,7 @@ Unless separately approved, version 1 does **not** include:
 | A-01 | JRSphere is a hybrid software company building its own products and offering development services. | Present both product and service value without making either audience search for relevance. |
 | A-02 | The first production URL is a GitHub **project** site. | Default base path is `/website/`, not `/`. |
 | A-03 | The site is primarily English. | Set `lang="en"`; additional languages require a separate localization plan. |
-| A-04 | Most content changes are occasional and made through Git. | Keep typed local content in the repository; no CMS in v1. |
+| A-04 | Most content changes are occasional and made through Git. | Keep approved content in semantic HTML with a separate editorial inventory; no CMS in v1. |
 | A-05 | There is no custom backend. | Use Web3Forms for the inquiry form with direct email as the always-visible fallback. |
 | A-06 | Progressive enhancement is required. | Core reading, navigation, and a fallback contact path work without client JavaScript. |
 | A-07 | The repository license is GPL-3.0. | Preserve the existing license and ensure third-party assets are license-compatible. |
@@ -89,7 +89,7 @@ Record architecture consequences in Section 24. “Proposed” items may use the
 
 ### 2.3 Content truth rule
 
-No developer may invent personal information, client names, employment history, awards, statistics, testimonials, or business outcomes. Missing optional content causes the relevant component or section to be omitted cleanly. Missing required content blocks launch.
+No developer may invent personal information, client names, employment history, awards, statistics, testimonials, or business outcomes. Missing optional content causes the relevant pattern or section to be omitted cleanly. Missing required content blocks launch.
 
 ---
 
@@ -139,11 +139,11 @@ flowchart LR
 ### 4.1 Version 1 deliverables
 
 1. Responsive static website.
-2. Design tokens and reusable component system.
+2. Design tokens and reusable HTML/CSS pattern system.
 3. Approved copy and optimized assets.
 4. SEO metadata, canonical URL, robots policy, sitemap, structured data, and social card.
 5. Accessible navigation, section landmarks, controls, and contact paths.
-6. Unit/component checks where logic exists, end-to-end smoke tests, automated accessibility checks, and Lighthouse CI.
+6. JavaScript checks where behavior exists, end-to-end smoke tests, automated accessibility checks, and Lighthouse audits.
 7. GitHub Actions workflows for CI and GitHub Pages deployment.
 8. Setup, content editing, deployment, and rollback documentation.
 9. Production QA evidence and an acceptance checklist.
@@ -174,7 +174,7 @@ Only begin these after all v1 acceptance criteria pass:
 | `/website/404.html` | Branded not-found recovery | Noindex | P0 |
 | `/website/work/[slug]/` | Future detailed case study | Index when complete | P2 |
 
-If a custom domain is adopted, replace `/website/` with `/` through configuration. No source template should hard-code either deployment path.
+If a custom domain is adopted, replace `/website/` with `/` through configuration. No static document should assume an unreviewed deployment path.
 
 ### 5.2 Main-page section order
 
@@ -256,16 +256,14 @@ Use prose width of approximately 60–75 characters. Avoid a biography wall.
 
 ### 5.7 Expertise/services
 
-Use three to six cards. Each card has:
+Use three to six cards. Each card follows this content contract:
 
-```ts
-interface ExpertiseItem {
-  title: string;
-  summary: string;
-  capabilities: string[]; // 2–5 concise items
-  icon?: string;          // decorative key, never the accessible label
-}
-```
+| Field | Required | Rule |
+|---|---:|---|
+| Title | Yes | Concise service or expertise name |
+| Summary | Yes | Outcome-oriented explanation |
+| Capabilities | Yes | Semantic list containing 2–5 concise items |
+| Icon | No | Decorative only; never the accessible label |
 
 Each card answers:
 
@@ -277,41 +275,24 @@ Cards are articles or list items, not clickable containers, unless each has a re
 
 ### 5.8 Selected work
 
-Render two to four projects when approved. Each project has:
+Render two to four projects when approved. Each project follows this content contract:
 
-```ts
-interface Project {
-  slug: string;
-  title: string;
-  summary: string;
-  status: 'prototype' | 'active-development' | 'privately-deployed' | 'publicly-live' | 'completed';
-  period: {
-    start: string; // YYYY-MM
-    end?: string;  // YYYY-MM; omit only for ongoing work
-  };
-  contributors: Array<{
-    name: string;
-    role: string;
-    responsibilities: string[];
-  }>;
-  challenge: string;
-  approach: string;
-  outcomes: Array<{
-    statement: string;
-    evidence?: string;
-  }>;
-  technologies: string[];
-  image?: {
-    src: string;
-    alt: string;
-    width: number;
-    height: number;
-  };
-  liveUrl?: string;
-  sourceUrl?: string;
-  featured: boolean;
-}
-```
+| Field | Required | Rule |
+|---|---:|---|
+| Slug | Yes | Lowercase, stable, URL-safe identifier |
+| Title | Yes | Approved project name |
+| Summary | Yes | Concise factual overview |
+| Status | Yes | Prototype, active development, privately deployed, publicly live, or completed |
+| Period | Yes | Start month and end month, or explicitly ongoing |
+| Contributors | Yes | Names, roles, and personal responsibilities approved for publication |
+| Challenge | Yes | Verified problem or constraint |
+| Approach | Yes | Factual implementation approach |
+| Outcomes | Yes | Verified statements with evidence where available |
+| Technologies | Yes | Semantic text list |
+| Image | No | Local path, alt text, width, and height |
+| Live URL | No | Public destination only |
+| Source URL | No | Public repository only |
+| Featured | Yes | Editorial decision represented by placement, not client-side data |
 
 Rules:
 
@@ -419,7 +400,7 @@ Include:
 - license link;
 - back-to-top link.
 
-The year may be generated at build time. The footer must not depend on client JavaScript.
+Use an approved literal copyright year and review it annually. The footer must not depend on JavaScript.
 
 ### 5.13 404 page
 
@@ -473,18 +454,22 @@ These are editorial targets, not hard truncation limits. CSS must never cut off 
 
 ### 6.3 Content storage
 
-Store structured content separately from presentation:
+Version 1 content is authored directly in semantic HTML so that search engines, assistive technology, and script-disabled browsers receive the complete page without a rendering or build step.
+
+Maintain the approved source copy separately from presentation work:
 
 ```text
-src/content/
-├── site.ts
-├── expertise.ts
-├── projects.ts
-├── process.ts
-└── social.ts
+docs/
+└── content-inventory.md     # editorial source, evidence, approval state, and asset provenance
 ```
 
-All exports are typed and validated at build time. If future case-study routes are approved, migrate projects to an Astro content collection with a schema. Do not add a CMS merely to avoid editing a TypeScript or Markdown file.
+Rules:
+
+- `docs/content-inventory.md` is not part of the published Pages artifact;
+- approved copy is transferred into the relevant HTML document;
+- core content must not be fetched from JSON or injected by JavaScript;
+- repeated site-wide content is deliberately reviewed across the small v1 page set;
+- a CMS or static-site generator requires a future architecture decision and is not part of v1.
 
 ### 6.4 Editorial rules
 
@@ -587,7 +572,7 @@ Avoid:
 
 ### 8.2 Token architecture
 
-Define semantic custom properties in `src/styles/tokens.css`. The following is a starting contract, not final art direction:
+Define semantic custom properties in `assets/css/tokens.css`. The following is a starting contract, not final art direction:
 
 ```css
 :root {
@@ -649,17 +634,17 @@ For dark mode, remap semantic tokens in `@media (prefers-color-scheme: dark)`; d
 
 ### 8.4 Layout primitives
 
-Implement small, reusable layout classes/components:
+Implement small, reusable CSS layout patterns:
 
-- `Container` — max width and inline gutter;
-- `Section` — consistent block rhythm and optional tone;
-- `Stack` — vertical rhythm;
-- `Cluster` — wrapping inline group;
-- `Grid` — auto-fit cards with a safe minimum;
-- `ButtonLink` — link styled as a primary or secondary action;
-- `TagList` — semantic list of labels.
+- `.container` — max width and inline gutter;
+- `.section` — consistent block rhythm and optional tone;
+- `.stack` — vertical rhythm;
+- `.cluster` — wrapping inline group;
+- `.grid` — auto-fit cards with a safe minimum;
+- `.button` — anchors or buttons styled consistently without changing their native semantics;
+- `.tag-list` — semantic list of labels.
 
-Use native CSS Grid/Flexbox and logical properties. Avoid a runtime CSS-in-JS dependency.
+Use native CSS Grid/Flexbox and logical properties. Do not use CSS-in-JS or a runtime styling dependency.
 
 ### 8.5 Asset rules
 
@@ -677,33 +662,33 @@ Use native CSS Grid/Flexbox and logical properties. Avoid a runtime CSS-in-JS de
 
 ### 9.1 Architecture decision
 
-Use **Astro with TypeScript in strict mode**, static output, semantic HTML, and plain CSS. Render all content at build time. Add client-side JavaScript only for interactions that cannot be achieved accessibly with HTML and CSS.
+Use **HTML5, CSS3, and vanilla JavaScript** as the complete production web stack. The repository stores the same static files that GitHub Pages serves. There is no framework, transpiler, template compiler, package runtime, or production build step.
 
 Why this fits:
 
-- GitHub Pages serves static assets only;
-- content-first components remain maintainable;
-- Astro emits minimal JavaScript by default;
-- route generation, metadata, sitemap integration, image optimization, and future content collections remain available;
-- TypeScript protects content and component contracts.
+- it matches the approved technology specification exactly;
+- GitHub Pages serves static files directly;
+- semantic content is present in HTML before CSS or JavaScript loads;
+- CSS custom properties, Grid, Flexbox, and media queries provide the required design system and responsive behavior;
+- native ES modules support the small amount of optional interaction without a framework;
+- fewer moving parts reduce maintenance, supply-chain, performance, and deployment risk.
 
-Package versions must be selected from maintained stable releases at project initialization, committed through the lockfile, and updated by reviewed pull requests. Do not copy unverified version numbers from this specification.
+Development-only validation tools may be proposed separately for approval. They must never become necessary for the production site to render or function.
 
 ### 9.2 Runtime model
 
 ```mermaid
 flowchart TD
-  C[Typed local content] --> A[Astro build]
-  P[Astro pages and components] --> A
-  S[CSS tokens and styles] --> A
-  M[Optimized local media] --> A
-  A --> D[Static dist output]
-  D --> G[GitHub Pages artifact]
+  H[Semantic HTML documents] --> G[GitHub Pages]
+  C[CSS files] --> G
+  J[Optional vanilla JavaScript modules] --> G
+  M[Optimized local media] --> G
   G --> U[Browser]
-  U -. optional approved outbound action .-> E[Email/profile/form provider]
+  U -. approved form submission .-> W[Web3Forms]
+  U -. fallback contact .-> E[Email/profile link]
 ```
 
-There is no JRSphere-hosted production Node server, API, secret, or database. The only v1 external write operation is the reviewed Web3Forms submission endpoint.
+There is no JRSphere-hosted production Node server, API, package runtime, secret, or database. The only v1 external write operation is the reviewed Web3Forms submission endpoint.
 
 ### 9.3 Repository structure
 
@@ -713,127 +698,80 @@ There is no JRSphere-hosted production Node server, API, secret, or database. Th
 │   ├── workflows/
 │   │   ├── ci.yml
 │   │   └── deploy-pages.yml
-│   ├── dependabot.yml
 │   └── pull_request_template.md
-├── public/
-│   ├── favicon.svg
-│   ├── favicon.ico
-│   ├── apple-touch-icon.png
-│   ├── og/
-│   │   └── jrsphere-default.png
-│   └── robots.txt                 # generate if base/domain requires it
-├── src/
-│   ├── assets/
-│   │   ├── brand/
-│   │   └── work/
-│   ├── components/
-│   │   ├── ButtonLink.astro
-│   │   ├── Container.astro
-│   │   ├── ExpertiseCard.astro
-│   │   ├── ProjectCard.astro
-│   │   ├── SectionHeading.astro
-│   │   ├── SiteFooter.astro
-│   │   ├── SiteHeader.astro
-│   │   ├── SkipLink.astro
-│   │   └── TagList.astro
-│   ├── content/
-│   │   ├── expertise.ts
-│   │   ├── process.ts
-│   │   ├── projects.ts
-│   │   ├── site.ts
-│   │   └── social.ts
-│   ├── layouts/
-│   │   └── BaseLayout.astro
-│   ├── pages/
-│   │   ├── privacy/
-│   │   │   └── index.astro
-│   │   ├── thanks/
-│   │   │   └── index.astro
-│   │   ├── 404.astro
-│   │   └── index.astro
-│   ├── scripts/
-│   │   └── navigation.ts          # only if a script is justified
-│   ├── styles/
-│   │   ├── global.css
+├── assets/
+│   ├── css/
 │   │   ├── reset.css
-│   │   └── tokens.css
-│   └── types/
-│       └── content.ts
-├── tests/
-│   ├── e2e/
-│   │   ├── accessibility.spec.ts
-│   │   ├── navigation.spec.ts
-│   │   └── smoke.spec.ts
-│   └── unit/
-│       └── content.test.ts
+│   │   ├── tokens.css
+│   │   └── main.css
+│   ├── icons/
+│   │   ├── favicon.svg
+│   │   └── apple-touch-icon.png
+│   ├── images/
+│   │   ├── brand/
+│   │   ├── og/
+│   │   │   └── jrsphere-default.png
+│   │   └── work/
+│   └── js/
+│       ├── main.js
+│       └── modules/                 # create only when an approved interaction needs it
+├── docs/
+│   └── content-inventory.md         # excluded from the deployment artifact
+├── privacy/
+│   └── index.html
+├── thanks/
+│   └── index.html
+├── tests/                           # development-only checks after separate tool approval
+│   └── e2e/
 ├── .editorconfig
 ├── .gitignore
-├── .nvmrc
-├── astro.config.mjs
-├── eslint.config.js
-├── lighthouserc.cjs
-├── package.json
-├── package-lock.json
-├── playwright.config.ts
-├── prettier.config.mjs
+├── .nojekyll
+├── 404.html
+├── index.html
+├── robots.txt
+├── sitemap.xml
 ├── README.md
 ├── SECURITY.md
-├── tsconfig.json
 └── JRSphere-Developer-Specification.md
 ```
 
 Do not create empty directories or placeholder files until the relevant phase starts.
 
-### 9.4 Configuration contract
+### 9.4 Static configuration contract
 
-Use environment variables only for public build configuration:
+There is no runtime environment-variable or build-time configuration layer in v1. Public configuration is explicit and reviewable in source:
 
-| Variable | Required | Example | Rule |
-|---|---:|---|---|
-| `PUBLIC_SITE_URL` | Production only | `https://jrspherejrs.github.io` | Origin, no trailing slash |
-| `PUBLIC_BASE_PATH` | Yes | `/website` | Empty string for custom-domain root; leading slash, no trailing slash |
-| `PUBLIC_WEB3FORMS_ACCESS_KEY` | Form builds only | Owner-generated UUID | Public by provider design and embedded in HTML; still manage as deployment configuration |
+| Value | Production value | Source location |
+|---|---|---|
+| Site origin | `https://jrspherejrs.github.io` | Canonical, social metadata, sitemap |
+| Project base | `/website/` | Internal route and asset-path review |
+| Contact email | `jrsphere.jrs@gmail.com` | Visible HTML contact fallback |
+| Web3Forms endpoint | `https://api.web3forms.com/submit` | Contact form `action` |
+| Web3Forms access key | Owner-generated public UUID | Hidden form input after activation approval |
 
-The Web3Forms endpoint is the reviewed constant `https://api.web3forms.com/submit`, not a configurable arbitrary URL. Production builds fail clearly when the form is enabled but the access key is missing. Commit only a `.env.example` placeholder, never an active key by accident; supply the production value through a GitHub Actions repository variable. The value is not treated as a secret because visitors can inspect it in the form.
-
-Astro configuration concept:
-
-```js
-import { defineConfig } from 'astro/config';
-import sitemap from '@astrojs/sitemap';
-
-const site = process.env.PUBLIC_SITE_URL ?? 'https://jrspherejrs.github.io';
-const base = process.env.PUBLIC_BASE_PATH ?? '/website';
-
-export default defineConfig({
-  site,
-  base,
-  output: 'static',
-  integrations: [sitemap()],
-});
-```
-
-Confirm Astro’s exact current configuration API during scaffolding. The invariant is that routes, assets, canonical URLs, and 404 recovery work under both project and root deployment paths.
+The Web3Forms key is public by provider design. With no build step, the approved key is placed directly in the HTML form. A placeholder key blocks deployment; it must never silently produce a broken production form.
 
 ### 9.5 URL and asset rules
 
-- Use Astro/base-aware URL helpers rather than string concatenation throughout components.
-- Do not reference site assets with root-absolute URLs such as `/images/x.webp` on a project site.
-- Canonical and Open Graph URLs are absolute production URLs.
-- Internal navigation preserves the configured base path.
-- Fragment links target unique IDs.
-- Test production output from a local server mounted at `/website/`, not only at `/`.
+- use document-relative URLs for local assets and routes so pages work under `/website/`;
+- do not use origin-root asset URLs such as `/assets/main.css` on the GitHub project site;
+- the home page uses paths such as `assets/css/main.css` and `privacy/`;
+- nested pages use paths such as `../assets/css/main.css` and `../`;
+- canonical, Open Graph, sitemap, and Web3Forms redirect URLs use absolute production URLs;
+- fragment links target unique IDs in `index.html`;
+- test the exact static artifact mounted at `/website/`, not only at `/`;
+- a future custom-domain migration must review every absolute production URL and relative route.
 
-### 9.6 Dependency rules
+### 9.6 Dependency and JavaScript rules
 
-- Each runtime dependency needs a documented purpose.
-- Prefer platform APIs and HTML/CSS to packages.
-- No component framework unless a measured interaction requires one.
-- No icon library shipped wholesale; import individual icons or use approved local SVG.
-- Commit the lockfile.
-- CI uses `npm ci`.
-- Dependabot groups safe patch/minor development updates; major updates require explicit review.
-- Run license and vulnerability checks before launch, while interpreting findings rather than blindly blocking on irrelevant development-only notices.
+- production has no package dependencies and requires no package manager;
+- use HTML and CSS before JavaScript;
+- use native ES modules and browser APIs when JavaScript is justified;
+- do not ship a component framework, utility runtime, icon library, polyfill bundle, or third-party script by default;
+- keep scripts local, deferred by module semantics, small, and organized by responsibility;
+- the page, navigation, content, email fallback, and native form submission remain usable when JavaScript is unavailable;
+- development-only QA tools require a separate approval, documented purpose, reproducible versioning, and license/security review;
+- generated development artifacts are excluded from the published site.
 
 ### 9.7 Browser support
 
@@ -849,53 +787,44 @@ Core content and navigation must remain usable in older or script-disabled brows
 
 ---
 
-## 10. Component contracts
+## 10. HTML pattern contracts
 
 ### 10.1 General contract
 
-Every component must:
+Every repeated HTML pattern must:
 
 - have one clear responsibility;
 - use semantic native elements first;
-- expose typed props;
-- avoid embedded factual copy unless structurally fixed;
-- inherit semantic tokens;
-- support long text and missing optional data;
-- avoid generating duplicate IDs;
-- render valid HTML;
-- have no client hydration unless required.
+- keep factual content in HTML;
+- use the semantic design tokens and layout classes;
+- support long text and missing optional content;
+- avoid duplicate IDs;
+- produce valid HTML;
+- remain understandable without CSS and usable without JavaScript.
 
-### 10.2 Base layout contract
+Because v1 has no template compiler, repeated header, footer, and metadata changes must be reviewed across every HTML page in the same pull request.
 
-`BaseLayout.astro` accepts:
+### 10.2 Document shell contract
 
-```ts
-interface BaseLayoutProps {
-  title: string;
-  description: string;
-  canonicalPath: string;
-  image?: string;
-  imageAlt?: string;
-  noindex?: boolean;
-}
-```
+Every HTML document contains:
 
-It owns:
-
-- doctype, language, viewport, and charset;
-- title and meta description;
-- canonical URL;
-- robots directive;
-- Open Graph and X/Twitter metadata;
+- `<!doctype html>` and the approved language;
+- charset and responsive viewport metadata;
+- unique title and description;
+- canonical URL and route-appropriate robots directive;
+- Open Graph and X/Twitter metadata where indexable;
 - icons and theme color;
-- structured data slot;
-- skip link;
-- global styles;
-- main landmark target.
+- valid JSON-LD where applicable;
+- skip link on content pages;
+- labeled header/navigation, one main landmark, and footer;
+- shared CSS links using the correct relative path;
+- route-appropriate JavaScript only when required.
+
+A release check compares all page shells to prevent stale metadata, navigation, privacy links, or asset paths.
 
 ### 10.3 Button-link rule
 
-Use `<a>` for navigation and `<button>` for actions that change state. Never add click handlers to non-interactive elements. `ButtonLink` styles an anchor but preserves anchor semantics.
+Use `<a>` for navigation and `<button>` for actions that change state. Never add click handlers to non-interactive elements. The `.button` class may style either native element but must not change its semantics.
 
 ### 10.4 Card rule
 
@@ -949,11 +878,11 @@ Rules:
 
 ### 11.4 Sitemap and robots
 
-- generate sitemap entries from canonical production routes;
+- maintain sitemap entries for canonical production routes;
 - do not include `404.html`, drafts, or noindex pages;
 - a root-domain `robots.txt` can advertise the sitemap;
 - on a GitHub project site, remember `robots.txt` is origin-root scoped and may be controlled by the owner site. Do not assume `/website/robots.txt` controls crawling;
-- verify the generated sitemap URLs include the project base path.
+- verify the sitemap URLs include the project base path.
 
 ### 11.5 Search release checks
 
@@ -1048,7 +977,7 @@ Minimum before release:
 
 ### 13.1 Production budgets
 
-Measured on a clean production build, compressed over the network:
+Measured on a clean production static artifact, compressed over the network:
 
 | Budget | Target |
 |---|---:|
@@ -1096,7 +1025,7 @@ Lab tests approximate these but do not guarantee field results.
 
 ### 14.1 Static-site security model
 
-- no secrets in source, build variables prefixed `PUBLIC_`, generated JavaScript, repository history, or action logs;
+- no secrets in HTML, CSS, JavaScript, repository history, deployment configuration, or action logs;
 - pin GitHub Actions to trusted major releases at minimum; for hardened environments, pin full commit SHAs and automate review;
 - grant workflow permissions explicitly and minimally;
 - do not execute untrusted pull-request code with write tokens;
@@ -1146,21 +1075,19 @@ This Arena work branch is `arena/01a0ecb8-demo`; implementation changes are deve
 
 ### 15.2 CI workflow behavior
 
-`.github/workflows/ci.yml` runs for pull requests and relevant pushes:
+`.github/workflows/ci.yml` runs for pull requests and relevant pushes. The exact development-only tools require separate approval, but the required checks are fixed:
 
 1. checkout;
-2. set up the project Node LTS version with npm cache;
-3. `npm ci`;
-4. formatting check;
-5. lint;
-6. Astro/type check;
-7. unit/content validation;
-8. production build with project base path;
-9. Playwright smoke and accessibility tests against built output;
-10. Lighthouse CI budget check;
-11. upload useful reports on failure without publishing secrets.
+2. verify that only approved public files enter the deployment manifest;
+3. validate HTML5 documents;
+4. validate CSS and vanilla JavaScript syntax/quality;
+5. check internal links, fragments, canonical URLs, and `/website/` paths;
+6. serve the static artifact at `/website/`;
+7. run browser smoke and automated accessibility checks;
+8. run Lighthouse budgets against the served static artifact;
+9. upload useful reports on failure without publishing form submissions or sensitive data.
 
-Use concurrency cancellation for superseded branch runs.
+Use concurrency cancellation for superseded branch runs. CI tooling is development-only; CI does not compile or transform production source.
 
 ### 15.3 Deployment workflow behavior
 
@@ -1171,8 +1098,9 @@ Use concurrency cancellation for superseded branch runs.
   - `contents: read`;
   - `pages: write`;
   - `id-token: write`;
-- builds once with production URL/base variables;
-- uploads `dist/` using the official Pages artifact action;
+- depends on the required quality checks;
+- copies only the approved static public files into a temporary `_site/` artifact without compiling or transforming them;
+- uploads `_site/` with the official Pages artifact action;
 - deploys via the official Pages deployment action;
 - uses the `github-pages` environment;
 - prevents overlapping deployments with a concurrency group;
@@ -1198,36 +1126,32 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
+  package:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/configure-pages@v6
+      - name: Stage approved static files
+        run: |
+          mkdir _site
+          cp index.html 404.html robots.txt sitemap.xml .nojekyll _site/
+          cp -R assets privacy thanks _site/
+      - uses: actions/upload-pages-artifact@v5
         with:
-          node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci
-      - run: npm run build
-        env:
-          PUBLIC_SITE_URL: https://jrspherejrs.github.io
-          PUBLIC_BASE_PATH: /website
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
+          path: _site
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
+    needs: package
     steps:
       - name: Deploy
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 ```
 
-Before committing, verify current official action releases and upgrade deliberately. Add a CI dependency so deploy cannot bypass mandatory quality gates, or duplicate the deterministic checks in the deployment build.
+Verify current official action releases before committing the workflow. The final workflow must connect deployment to mandatory CI status checks so a failing release candidate cannot be published.
 
 ### 15.4 Custom domain plan
 
@@ -1236,9 +1160,9 @@ If moving to a custom domain:
 1. confirm domain ownership and exact apex/subdomain strategy;
 2. configure DNS according to current GitHub Pages documentation;
 3. configure the domain in repository Pages settings;
-4. add `public/CNAME` only if required by the chosen Pages flow;
-5. set `PUBLIC_SITE_URL` to the custom origin and `PUBLIC_BASE_PATH` to an empty root path;
-6. rebuild canonical URLs, sitemap, Open Graph URLs, and internal paths;
+4. add a root `CNAME` file only if required by the chosen Pages flow;
+5. update canonical URLs, sitemap, Open Graph URLs, Web3Forms redirect, and internal paths for the custom origin;
+6. remove `/website/` assumptions and validate the unchanged static files from the domain root;
 7. enable/enforce HTTPS after certificate provisioning;
 8. test both old and new URLs and define redirect expectations—GitHub Pages redirect control is limited;
 9. update profile links and search properties.
@@ -1270,7 +1194,7 @@ For an urgent incident, rerun/redeploy a known-good artifact only if the workflo
 ### 16.2 Suggested commit sequence
 
 1. `docs: add implementation blueprint`
-2. `chore: scaffold astro static site`
+2. `chore: add static HTML CSS and JavaScript foundation`
 3. `feat: add design tokens and base layout`
 4. `feat: implement navigation and core sections`
 5. `feat: add approved content and optimized media`
@@ -1298,7 +1222,7 @@ A ticket is ready when it has:
 A change is done when:
 
 - acceptance criteria pass;
-- types, lint, tests, build, and budget checks pass;
+- HTML, CSS, JavaScript, link, test, accessibility, and budget checks pass;
 - keyboard and relevant screen-reader behavior is verified;
 - responsive behavior is checked at content-driven sizes;
 - no placeholder/fabricated content remains;
@@ -1332,30 +1256,30 @@ The estimates assume one experienced frontend developer with timely owner review
 
 **Output:** signed content/decision matrix and prioritized scope.
 
-### Phase 1 — Repository and toolchain foundation (0.5–1 day)
+### Phase 1 — Repository and static foundation (0.5–1 day)
 
 **Tasks**
 
-- scaffold Astro/TypeScript static project in the existing repository;
-- select current Node LTS and commit `.nvmrc` plus lockfile;
-- configure strict TypeScript, format, lint, and Astro checks;
-- add scripts: `dev`, `build`, `preview`, `check`, `lint`, `format:check`, `test`, `test:e2e`, `audit`;
-- add `.editorconfig`, `.gitignore`, PR template, security policy;
-- configure base-path-aware local and production builds;
-- create first CI workflow.
+- create the semantic `index.html` foundation in the existing repository;
+- add reset, token, and main CSS files plus an empty-by-default vanilla JavaScript module entry;
+- add `.editorconfig`, `.gitignore`, `.nojekyll`, PR template, and security policy;
+- establish the approved public-file deployment manifest;
+- use relative asset and route paths compatible with `/website/`;
+- select development-only QA tooling only through a separate approval;
+- create the first CI workflow after its exact tools and code are approved.
 
 **Gate G1: reproducible foundation**
 
-From a clean checkout, `npm ci && npm run build` succeeds and generated output contains no environment-specific local URLs.
+From a clean checkout, the static files can be served directly without compilation, all local resources resolve, and no source contains an unapproved production origin or framework dependency.
 
-**Output:** deployable “hello shell” with green CI.
+**Output:** directly deployable semantic HTML shell with no production build step.
 
 ### Phase 2 — Design system and application shell (1–2 days)
 
 **Tasks**
 
 - implement reset, semantic tokens, fluid type, spacing, themes, and layout primitives;
-- build BaseLayout, skip link, header, navigation, footer, buttons, and section heading;
+- build the document shell, skip link, header, navigation, footer, buttons, and section-heading patterns;
 - implement responsive shell and focus states;
 - validate contrast in every theme and interaction state;
 - establish reduced-motion and forced-colors behavior.
@@ -1366,11 +1290,11 @@ Keyboard users can navigate the shell at mobile/desktop sizes; zoom and contrast
 
 **Output:** approved shell/story page with representative long content.
 
-### Phase 3 — Core sections and typed content (2–3 days)
+### Phase 3 — Core sections and approved HTML content (2–3 days)
 
 **Tasks**
 
-- define typed content interfaces and validation;
+- finalize the content inventory and HTML field contracts;
 - implement Hero, About, Expertise, Process, Technology, Contact;
 - implement conditional Proof and Work sections;
 - handle missing optional fields and long content;
@@ -1388,8 +1312,8 @@ All visible copy is approved or clearly marked as release-blocking in a non-prod
 **Tasks**
 
 - add titles, descriptions, canonical URLs, social metadata, icons;
-- generate and validate JSON-LD;
-- generate sitemap with correct base path;
+- author and validate JSON-LD;
+- author and validate the sitemap with the correct base path;
 - implement 404 page;
 - verify script-disabled, failed-image, and fallback-font behavior;
 - add the required Web3Forms privacy page and noindex inquiry-success page.
@@ -1404,13 +1328,13 @@ No local/staging canonical URLs, metadata placeholders, invalid structured data,
 
 **Tasks**
 
-- add content validation tests;
+- add HTML content, metadata, and link validation checks;
 - add Playwright desktop/mobile smoke journeys;
 - integrate an accessibility engine such as axe with Playwright;
 - add link/path tests and script-disabled smoke test;
 - configure Lighthouse CI budgets;
 - optimize media, fonts, CSS, and any JavaScript;
-- run dependency/license review;
+- run a license/security review for assets and any separately approved development-only tools;
 - test agreed browsers and assistive technology.
 
 **Gate G5: release candidate**
@@ -1444,7 +1368,7 @@ Product owner and technical owner sign off the Section 21 checklist.
 - create an issue backlog for deferred items;
 - schedule 7-day and 30-day post-launch checks;
 - review feedback and field performance if available;
-- update dependencies through reviewed automation.
+- review any approved development-only QA tools through controlled updates.
 
 **Output:** maintainable ownership, not an abandoned one-off site.
 
@@ -1471,11 +1395,11 @@ Use these as epics/stories. IDs provide traceability to acceptance criteria.
 
 | ID | Story | Depends on | Done evidence |
 |---|---|---|---|
-| ARC-01 | Scaffold static Astro/TypeScript application | G0 | Clean build and local preview |
+| ARC-01 | Create the static HTML/CSS/JavaScript foundation | G0 | Direct local serve and semantic review |
 | ARC-02 | Configure base-path-safe routing and assets | ARC-01, D-03 | `/website/` production-like test passes |
-| ARC-03 | Add typed content models and validation | ARC-01 | Invalid content fails CI clearly |
+| ARC-03 | Add content inventory and HTML field contracts | ARC-01 | Missing or unapproved content fails review/CI clearly |
 | DS-01 | Implement color/type/spacing tokens | ARC-01 | Contrast and responsive review |
-| DS-02 | Implement layout primitives and controls | DS-01 | Component review at narrow/wide widths |
+| DS-02 | Implement layout patterns and controls | DS-01 | Pattern review at narrow/wide widths |
 | UI-01 | Implement accessible shell/navigation | DS-02 | Keyboard/mobile tests |
 | UI-02 | Implement required content sections | ARC-03, UI-01 | Approved content renders semantically |
 | UI-03 | Implement conditional Work/Proof | ARC-03 | Present and absent-state tests |
@@ -1499,11 +1423,11 @@ Use these as epics/stories. IDs provide traceability to acceptance criteria.
 
 | Layer | Tools/approach | Purpose |
 |---|---|---|
-| Static | Astro check, TypeScript, ESLint, HTML output inspection | Catch contracts and invalid implementation early |
-| Unit/content | Vitest or Node test runner | Validate URLs, unique slugs/IDs, required fields, content rules |
-| E2E | Playwright | Golden paths, navigation, responsive menu, fragments, 404 |
-| Accessibility automation | axe integrated with Playwright | Detect common WCAG failures on representative states |
-| Performance | Lighthouse CI | Enforce budgets on production output |
+| Static source | HTML5 validation, CSS validation/lint, and vanilla JavaScript syntax/lint using separately approved development tools | Catch invalid source and standards failures early |
+| Content/link | Static checks selected during QA-tool approval | Validate URLs, unique IDs, metadata, required fields, and content rules |
+| Browser journey | Approved browser automation or documented manual equivalent | Golden paths, navigation, responsive menu, fragments, and 404 |
+| Accessibility automation | Approved accessibility engine against served static pages | Detect common WCAG failures on representative states |
+| Performance | Lighthouse audit against the served static artifact | Enforce budgets without changing production files |
 | Visual | Manual screenshots or approved snapshot tool | Catch layout regressions at key sizes/themes |
 | Manual accessibility | Keyboard, screen readers, zoom, contrast | Cover issues automation cannot |
 | Production smoke | Browser + URL inspection | Catch hosting/base/caching/deployment errors |
@@ -1575,7 +1499,7 @@ Static hosting still requires operational ownership.
 
 - GitHub Actions deployment status;
 - GitHub Pages environment history;
-- repository security and dependency alerts;
+- repository security alerts and, if development tools are approved, dependency alerts;
 - manual uptime/HTTP check if approved;
 - scheduled broken-link and Lighthouse workflow, no more frequent than useful;
 - Search Console/Bing Webmaster tools only when the owner establishes verified access.
@@ -1585,16 +1509,16 @@ Static hosting still requires operational ownership.
 | Cadence | Action |
 |---|---|
 | Every content change | Re-run full CI, link check, metadata review if relevant |
-| Monthly | Dependency/security review; external link spot check |
+| Monthly | Security review, approved development-tool review, and external-link spot check |
 | Quarterly | Browser/assistive-tech smoke test, content freshness, performance audit |
 | Annually | Copyright year behavior, bio/projects, privacy/legal review, domain renewal check |
 | Incident | Roll back, verify, document root cause and prevention |
 
 ### 20.3 Content change workflow
 
-1. Edit typed content, not component markup.
+1. Update the approved content inventory, then edit the relevant semantic HTML.
 2. Add/replace optimized media with documented rights.
-3. Run local checks and production build.
+3. Run local source checks and serve the unchanged static files.
 4. Review at narrow/wide viewports and relevant themes.
 5. Open PR with copy owner approval.
 6. Merge only after CI.
@@ -1653,7 +1577,7 @@ The website is accepted only when every applicable item below is checked, or a d
 
 ### 21.5 Performance
 
-- [ ] All Section 13 budgets pass on the production build.
+- [ ] All Section 13 budgets pass on the deployed static site.
 - [ ] LCP resource is identified and appropriately loaded.
 - [ ] Images have dimensions and below-fold media is lazy-loaded.
 - [ ] No unnecessary client framework or third-party script ships.
@@ -1662,9 +1586,10 @@ The website is accepted only when every applicable item below is checked, or a d
 
 ### 21.6 Engineering and security
 
-- [ ] Clean checkout succeeds with documented install/build commands.
-- [ ] Lockfile is committed and `npm ci` passes.
-- [ ] Type, format, lint, test, E2E, accessibility, and build checks pass.
+- [ ] A clean checkout serves directly with the documented local command and no production install/build step.
+- [ ] Production contains no framework, TypeScript, package runtime, or compiled application output.
+- [ ] HTML, CSS, vanilla JavaScript, link, browser, accessibility, and performance checks pass.
+- [ ] If development-only QA packages are later approved, their lockfile is committed and reproducible installation passes.
 - [ ] No secret, personal data, private URL, or sensitive screenshot exists in source/history/output.
 - [ ] Dependencies have documented purpose and acceptable licenses.
 - [ ] Workflow permissions are minimal and production deploy is main-only.
@@ -1705,14 +1630,14 @@ Known exceptions:
 
 | ID | Risk | Probability | Impact | Mitigation |
 |---|---|---:|---:|---|
-| R-01 | Approved content arrives late | High | High | Content gate in Phase 0; use typed templates privately, never public placeholders |
+| R-01 | Approved content arrives late | High | High | Content gate in Phase 0; use a reviewed content worksheet, never public placeholders |
 | R-02 | GitHub project base path breaks assets/links | Medium | High | Central base config; production-like `/website/` E2E test |
 | R-03 | Visual effects increase JS/media cost | Medium | Medium | Strict budgets and progressive enhancement review |
 | R-04 | Unverified claims damage trust | Medium | High | Content truth rule and owner sign-off |
 | R-05 | Web3Forms creates privacy, spam, or availability concerns | Medium | High | Minimal fields, privacy notice, botcheck, production test, provider-state handling, and always-visible email fallback |
 | R-06 | Automated accessibility tests create false confidence | High | High | Mandatory manual keyboard, zoom, and screen-reader matrix |
 | R-07 | Custom domain change damages indexing | Low | High | Coordinated URL/canonical/sitemap release plan |
-| R-08 | Dependency upgrades break build | Medium | Medium | Lockfile, CI, grouped automated PRs, reviewed majors |
+| R-08 | Development-only QA tool updates break validation | Low | Medium | Pin approved tools, commit their lockfile if introduced, and review updates separately from production source |
 | R-09 | License-incompatible/unapproved assets are used | Medium | High | Asset provenance field and pre-release license audit |
 | R-10 | Empty repository grows without maintainable conventions | Medium | Medium | Enforce architecture, content separation, documentation, and Definition of Done |
 
@@ -1724,8 +1649,8 @@ Maintain this table during delivery. Do not erase superseded decisions; mark the
 
 | ID | Decision | Status | Rationale | Date |
 |---|---|---|---|---|
-| ADR-001 | Use Astro static output with strict TypeScript | Proposed | Minimal JS, static Pages compatibility, typed content, future route support | 2026-09-29 |
-| ADR-002 | Keep v1 content in typed repository modules | Proposed | Low update frequency; avoids CMS cost and attack surface | 2026-09-29 |
+| ADR-001 | Use Astro static output with strict TypeScript | Rejected | Conflicts with the approved HTML5/CSS3/vanilla JavaScript stack and adds an unnecessary compilation layer | 2026-09-29 |
+| ADR-002 | Keep v1 content in typed repository modules | Superseded by ADR-012 | Core content must be present directly in semantic HTML | 2026-09-29 |
 | ADR-003 | Deploy through GitHub Actions to GitHub Pages | Accepted | Auditable/reproducible deployment; no committed build output | 2026-09-29 |
 | ADR-004 | Treat `/website` as default production base | Accepted | Owner selected the initial GitHub project site | 2026-09-29 |
 | ADR-005 | Use Web3Forms with a direct-email fallback | Accepted with activation gate | Static-hosting fit; form access key and privacy approval are still required | 2026-09-29 |
@@ -1735,31 +1660,35 @@ Maintain this table during delivery. Do not erase superseded decisions; mark the
 | ADR-009 | Follow system light/dark preference | Proposed | Accessible default with no client persistence required | 2026-09-29 |
 | ADR-010 | Represent project ownership as collective while attributing individual evidence by person | Accepted with content gate | Owner rejected a sole-owner model; public contributor names, roles, and dates remain required for individual academic evidence | 2026-09-29 |
 | ADR-011 | Describe JRSphere Office Platform as privately deployed | Accepted | Owner confirmed deployment but stated it is not public | 2026-09-29 |
+| ADR-012 | Use HTML5, CSS3, and vanilla JavaScript with no production build step | Accepted | Matches the approved specification, GitHub Pages hosting model, and progressive-enhancement goals | 2026-09-29 |
 
 ---
 
-## 25. Developer command contract
+## 25. Local development and validation contract
 
-After scaffolding, the README and `package.json` must support:
+Production requires no dependency installation or build command. A basic local server is sufficient:
 
 ```bash
-npm ci                 # exact reproducible install
-npm run dev            # local development
-npm run check          # Astro and TypeScript checks
-npm run lint           # source lint
-npm run format:check   # formatting without mutation
-npm run test           # unit/content tests
-npm run build          # production static build
-npm run preview        # serve built output locally
-npm run test:e2e       # Playwright smoke/accessibility tests
-npm run audit          # project-defined dependency/license review
+python3 -m http.server 8000
 ```
 
-A single CI command may orchestrate these, but the individual commands remain available for diagnosis.
+Open `http://localhost:8000/` for a root-path content review. This does not replace the required `/website/` path test.
+
+Any formatting, linting, browser automation, or Lighthouse commands are added only after their development-only tools and exact configuration receive separate approval. The README must document every approved command and distinguish source validation from production behavior.
 
 ### 25.1 Local production-path test
 
-The implementation must document one command that serves the generated project exactly as GitHub Pages will, including `/website/`. A root-only preview is not sufficient evidence for deployment readiness.
+Test the unchanged public files under the GitHub Pages project path:
+
+```bash
+preview_root="$(mktemp -d)"
+mkdir -p "$preview_root/website"
+cp -R index.html 404.html assets privacy thanks robots.txt sitemap.xml .nojekyll \
+  "$preview_root/website/"
+python3 -m http.server 8000 --directory "$preview_root"
+```
+
+Open `http://localhost:8000/website/`. The staged files must be byte-for-byte copies of approved production source; the command packages but does not compile or transform them.
 
 ---
 
