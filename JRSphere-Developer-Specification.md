@@ -1,7 +1,7 @@
 # JRSphere Website — Developer Specification and Delivery Blueprint
 
 > **Status:** Implementation-ready blueprint  
-> **Version:** 1.0.0  
+> **Version:** 1.1.0
 > **Repository:** `jrspherejrs/website`
 > **Target hosting:** GitHub Pages  
 > **Primary delivery model:** Statically generated, content-led website  
@@ -59,30 +59,33 @@ Unless separately approved, version 1 does **not** include:
 
 | ID | Assumption | Implementation consequence |
 |---|---|---|
-| A-01 | JRSphere is a professional developer/technology brand or portfolio. | Use a focused professional single-page experience with case-study-ready content. |
+| A-01 | JRSphere is a hybrid software company building its own products and offering development services. | Present both product and service value without making either audience search for relevance. |
 | A-02 | The first production URL is a GitHub **project** site. | Default base path is `/website/`, not `/`. |
 | A-03 | The site is primarily English. | Set `lang="en"`; additional languages require a separate localization plan. |
 | A-04 | Most content changes are occasional and made through Git. | Keep typed local content in the repository; no CMS in v1. |
-| A-05 | There is no backend. | Contact uses direct email/social links or an approved third-party form endpoint. |
-| A-06 | Progressive enhancement is required. | Core reading and navigation work without client JavaScript. |
+| A-05 | There is no custom backend. | Use Web3Forms for the inquiry form with direct email as the always-visible fallback. |
+| A-06 | Progressive enhancement is required. | Core reading, navigation, and a fallback contact path work without client JavaScript. |
 | A-07 | The repository license is GPL-3.0. | Preserve the existing license and ensure third-party assets are license-compatible. |
+| A-08 | Clients, hiring teams, and academic admissions committees are primary evaluators. | Case studies must distinguish company output from each named contributor’s role, dates, responsibilities, and evidence. |
 
-### 2.2 Mandatory owner decisions before implementation begins
+### 2.2 Owner decision register
 
-Record each decision in Section 24.
+Record architecture consequences in Section 24. “Proposed” items may use the stated default during foundation work but require approval before content freeze.
 
-| Gate | Required decision | Allowed options | Default if not supplied |
+| Gate | Required decision | Direction | Status |
 |---|---|---|---|
-| D-01 | Brand subject | Individual / studio / company | Individual professional brand |
-| D-02 | Primary conversion | Email / project inquiry form / booking link | Email |
-| D-03 | Production URL | `https://jrspherejrs.github.io/website/` / custom domain | GitHub project URL |
-| D-04 | Public contact details | Approved email and social/profile links | Publish no guessed details |
-| D-05 | Sections | Approve the v1 information architecture in Section 5 | Use all core sections |
-| D-06 | Case studies | 2–4 approved projects with verifiable facts | Hide Work section until content exists |
-| D-07 | Analytics | None / privacy-respecting analytics | None |
-| D-08 | Theme | Light only / light and dark | Light and dark, following system preference |
-| D-09 | Portrait/logo assets | Approved files and usage rights | Text wordmark; no generated portrait |
-| D-10 | Contact form | None / approved provider | No form; direct email link |
+| D-01 | Brand subject | Hybrid software company: own products plus development services | Confirmed |
+| D-02 | Primary conversion | Project inquiry form with direct email fallback | Confirmed |
+| D-03 | Production URL | `https://jrspherejrs.github.io/website/` | Confirmed |
+| D-04 | Public contact details | `jrsphere.jrs@gmail.com`; approved profiles still pending | Partially confirmed |
+| D-05 | Sections | Use the v1 information architecture in Section 5 | Proposed |
+| D-06 | Case studies | Feature JRSphere Office Platform first; additional projects may follow | Partially confirmed; project facts/assets pending |
+| D-07 | Analytics | None | Proposed default |
+| D-08 | Theme | Light and dark, following system preference | Proposed default |
+| D-09 | Brand assets | Text wordmark until licensed logo/imagery is supplied | Proposed default |
+| D-10 | Contact form | Web3Forms with accessible native form behavior and email fallback | Selected; access key and privacy approval pending |
+| D-11 | Academic evidence attribution | Collective/team ownership; do not claim a sole owner. Name each applicant/contributor and their individual role, dates, and responsibilities. | Partially confirmed; public names and roles pending |
+| D-12 | Project status | Deployed privately; no public live URL | Confirmed |
 
 ### 2.3 Content truth rule
 
@@ -96,8 +99,9 @@ No developer may invent personal information, client names, employment history, 
 
 | Audience | Need | Evidence required | Desired action |
 |---|---|---|---|
-| Hiring manager or recruiter | Quickly assess fit, skills, and experience | Selected work, role, stack, outcomes, résumé/profile | Start a conversation |
+| Hiring manager or recruiter | Quickly assess company capability and a named contributor’s skills and experience | Selected work, role, stack, dates, outcomes, résumé/profile | Start a conversation |
 | Potential client | Understand services and delivery confidence | Capabilities, process, proof, availability | Send a project inquiry |
+| Academic admissions committee | Verify that claimed work demonstrates relevant, attributable experience | Named applicant, role, dates, responsibilities, artifacts, repository history, and outcomes | Evaluate the application with credible evidence |
 | Engineering peer | Assess technical depth and approach | Architecture decisions, code links, project detail | Explore work or connect |
 | Search/social visitor | Understand context immediately | Clear title, description, social preview | Continue into the site |
 | Assistive-technology user | Access the same content and actions | Semantic structure, labels, focus, alternatives | Complete any journey independently |
@@ -109,12 +113,14 @@ flowchart LR
   A[Search, referral, or profile link] --> B[Hero: identity and value]
   B --> C{Visitor intent}
   C -->|Evaluate expertise| D[Expertise and stack]
-  C -->|Evaluate proof| E[Selected work]
+  C -->|Evaluate company proof| E[Selected work]
+  C -->|Verify applicant experience| I[Named role, dates, contributions, and evidence]
   C -->|Understand approach| F[Process and about]
   D --> G[Contact CTA]
   E --> G
+  I --> E
   F --> G
-  G --> H[Email, approved form, or profile]
+  G --> H[Web3Forms inquiry, direct email, or profile]
 ```
 
 ### 3.3 Journey requirements
@@ -150,7 +156,7 @@ Only begin these after all v1 acceptance criteria pass:
 - writing/blog collection and RSS feed;
 - localized content;
 - privacy-respecting analytics;
-- third-party inquiry form with spam protection;
+- CRM, scheduling, or advanced inquiry automation beyond the v1 Web3Forms flow;
 - downloadable résumé, only if a current accessible PDF is provided;
 - theme override control persisted in local storage.
 
@@ -163,8 +169,9 @@ Only begin these after all v1 acceptance criteria pass:
 | Route | Purpose | Indexing | Priority |
 |---|---|---:|---:|
 | `/website/` | Main website and all v1 content | Index | P0 |
+| `/website/privacy/` | Explain Web3Forms processing and contact-data handling | Index | P0 |
+| `/website/thanks/` | Successful inquiry confirmation and next steps | Noindex | P0 |
 | `/website/404.html` | Branded not-found recovery | Noindex | P0 |
-| `/website/privacy/` | Add only if analytics or a form creates a need | Index or noindex per legal review | P2 |
 | `/website/work/[slug]/` | Future detailed case study | Index when complete | P2 |
 
 If a custom domain is adopted, replace `/website/` with `/` through configuration. No source template should hard-code either deployment path.
@@ -277,7 +284,16 @@ interface Project {
   slug: string;
   title: string;
   summary: string;
-  role: string;
+  status: 'prototype' | 'active-development' | 'privately-deployed' | 'publicly-live' | 'completed';
+  period: {
+    start: string; // YYYY-MM
+    end?: string;  // YYYY-MM; omit only for ongoing work
+  };
+  contributors: Array<{
+    name: string;
+    role: string;
+    responsibilities: string[];
+  }>;
   challenge: string;
   approach: string;
   outcomes: Array<{
@@ -300,7 +316,9 @@ interface Project {
 Rules:
 
 - outcome claims must be measurable or carefully qualitative and verifiable;
-- clearly state JRSphere’s role, especially on team projects;
+- show the project’s current status and do not present active development as a completed or production system;
+- clearly state the company’s role and each named contributor’s personal role, period, and responsibilities, especially for academic or employment verification;
+- link claims to permissible evidence such as repository history, pull requests, architecture records, screenshots, releases, or live demonstrations;
 - use descriptive link labels, for example “View Acme accessibility redesign,” not “Learn more”;
 - external links identify that they open an external destination; opening a new tab is not the default;
 - do not expose private repository links;
@@ -308,6 +326,26 @@ Rules:
 - omit absent URLs instead of showing disabled controls.
 
 If there are no approved projects, remove the Work navigation item and section; strengthen Expertise and Process. Never ship placeholder projects.
+
+#### 5.8.1 Confirmed first project record
+
+Use the following only as a starting record; unresolved fields block publication of the case study:
+
+| Field | Confirmed value |
+|---|---|
+| Name | JRSphere Office Platform |
+| Public description | Internal enterprise management system |
+| Source | `https://github.com/JRSphere/jrs-platform` |
+| Visible implementation | TypeScript monorepo with a Next.js web application and NestJS API |
+| Status | Privately deployed; not publicly accessible |
+| Ownership model | Collective/team ownership; do not identify a sole owner |
+| Named contributor/applicant | **Open decision D-11**; public names pending |
+| Role, dates, responsibilities | **Open decision D-11**; per-person attribution pending |
+| Outcomes and evidence | Pending factual content review |
+| Live URL | Private; do not publish or imply public access |
+| Screenshots | Not supplied; sanitize any future internal screenshots |
+
+The website may state that the platform is privately deployed because the owner confirmed that status. It must not claim public availability, user numbers, commercial results, team size, completed scope, or a named person’s contribution until those facts are separately approved.
 
 ### 5.9 Delivery process
 
@@ -340,21 +378,36 @@ Requirements:
 
 Required:
 
-- direct, specific invitation;
-- primary approved email or form link;
-- optional profile links;
+- direct, specific invitation for project, employment, or academic-verification inquiries;
+- accessible inquiry form submitted to Web3Forms;
+- always-visible fallback email link to `jrsphere.jrs@gmail.com`;
+- optional approved profile links;
 - expected response statement only if it can be honored;
-- short privacy note if data is submitted to a third party.
+- concise notice linking to `/privacy/` before submission.
 
-A static `mailto:` link is the v1 default. If a third-party form is approved:
+Web3Forms is a strong technical fit for this static GitHub Pages site because it accepts client-side HTML form submissions without a custom backend. It is still an external data processor, not part of JRSphere. Version 1 must:
 
-- document the provider and data processor;
-- use real `<label>` elements, autocomplete tokens, clear instructions, and text errors;
-- retain entered values after validation errors;
-- provide visible success and failure states;
-- add a spam-control approach that does not create an inaccessible puzzle;
-- verify the provider permits the production origin;
-- add/update a privacy notice before release.
+- post to `https://api.web3forms.com/submit` using an owner-generated access key;
+- treat the access key as public configuration rather than a secret; it is visible in the delivered form by design;
+- include fields for name, email, organization/institution, inquiry type, and message;
+- use real `<label>` elements, suitable autocomplete tokens, clear instructions, native constraints, and text errors;
+- use a hidden fixed subject and include the Web3Forms `botcheck` honeypot;
+- redirect successful non-JavaScript submissions to the absolute production `/website/thanks/` URL;
+- retain entered values when client-side validation fails;
+- provide visible pending, success, rate-limit, provider-failure, and offline states if JavaScript enhancement is added;
+- never make JavaScript the only submission path;
+- keep the direct email fallback visible before and after any provider failure;
+- avoid CAPTCHA at launch; add an accessibility-reviewed challenge only if measured spam makes it necessary;
+- verify submission from the production GitHub Pages origin;
+- disclose that submissions are processed by Web3Forms, whose published documentation states processing occurs on US-East servers and that server logs containing personal information may be retained for up to two months;
+- obtain owner approval for the privacy notice and processor choice before enabling the production form.
+
+The form must not request sensitive academic records, identity documents, passwords, payment details, health data, or other unnecessary personal information.
+
+Provider references to re-check during implementation:
+
+- [Web3Forms API reference](https://docs.web3forms.com/getting-started/api-reference)
+- [Web3Forms access-key and privacy FAQ](https://docs.web3forms.com/getting-started/faq)
 
 ### 5.12 Footer
 
@@ -385,17 +438,21 @@ The year may be generated at build time. The footer must not depend on client Ja
 
 The owner must provide this before the content-complete milestone:
 
-- approved brand display name and legal/copyright name;
-- role/positioning line;
+- approved company display name and legal/copyright name;
+- company positioning line and service/product model;
 - hero heading and value proposition;
 - short and long descriptions for SEO and page copy;
 - About copy;
+- named founder/applicant/contributor profile where academic experience must be verified;
+- role title, start/end dates, responsibilities, and attribution evidence for that person;
 - three to six expertise entries;
 - process wording or approval of the recommended model;
 - technology list;
-- contact email and approved profile URLs;
-- two to four projects, if Work is included;
-- logo/wordmark, portrait, project images, and social image, or approval to create non-deceptive brand graphics;
+- approved contact email (`jrsphere.jrs@gmail.com`) and profile URLs;
+- owner-generated Web3Forms access key and approved privacy wording;
+- approved JRSphere Office Platform status, role, dates, evidence, and screenshots where available;
+- up to three additional projects, if Work is included;
+- logo/wordmark, team/contributor portrait, project images, and social image, or approval to create non-deceptive brand graphics;
 - written asset licenses and credits where required.
 
 ### 6.2 Copy limits
@@ -646,7 +703,7 @@ flowchart TD
   U -. optional approved outbound action .-> E[Email/profile/form provider]
 ```
 
-There is no production Node server, API, secret, or database.
+There is no JRSphere-hosted production Node server, API, secret, or database. The only v1 external write operation is the reviewed Web3Forms submission endpoint.
 
 ### 9.3 Repository structure
 
@@ -688,6 +745,10 @@ There is no production Node server, API, secret, or database.
 │   ├── layouts/
 │   │   └── BaseLayout.astro
 │   ├── pages/
+│   │   ├── privacy/
+│   │   │   └── index.astro
+│   │   ├── thanks/
+│   │   │   └── index.astro
 │   │   ├── 404.astro
 │   │   └── index.astro
 │   ├── scripts/
@@ -731,7 +792,9 @@ Use environment variables only for public build configuration:
 |---|---:|---|---|
 | `PUBLIC_SITE_URL` | Production only | `https://jrspherejrs.github.io` | Origin, no trailing slash |
 | `PUBLIC_BASE_PATH` | Yes | `/website` | Empty string for custom-domain root; leading slash, no trailing slash |
-| `PUBLIC_CONTACT_ENDPOINT` | Conditional | Provider URL | Public by definition; never contains a secret |
+| `PUBLIC_WEB3FORMS_ACCESS_KEY` | Form builds only | Owner-generated UUID | Public by provider design and embedded in HTML; still manage as deployment configuration |
+
+The Web3Forms endpoint is the reviewed constant `https://api.web3forms.com/submit`, not a configurable arbitrary URL. Production builds fail clearly when the form is enabled but the access key is missing. Commit only a `.env.example` placeholder, never an active key by accident; supply the production value through a GitHub Actions repository variable. The value is not treated as a secret because visitors can inspect it in the form.
 
 Astro configuration concept:
 
@@ -873,9 +936,10 @@ Do not add obsolete `keywords` metadata.
 Emit JSON-LD from the approved brand model:
 
 - `WebSite` for the site;
-- `Person` if JRSphere represents an individual;
-- `Organization` or `ProfessionalService` only if it is genuinely a business entity/service;
-- `sameAs` only for approved profiles owned by the subject.
+- `Organization` for JRSphere, using only approved company identity fields;
+- `Person` for a founder, employee, or applicant only after their public name and relationship to JRSphere are approved;
+- use a truthful relationship such as `founder`, `employee`, or `member`; do not imply employment or incorporation status without evidence;
+- `sameAs` only for approved profiles owned by the relevant company or person.
 
 Rules:
 
@@ -1049,8 +1113,11 @@ GitHub Pages does not provide arbitrary response-header control. Do not claim CS
 - no unnecessary cookies or local storage;
 - external embeds require explicit review because they can leak visitor data;
 - link to external profiles normally instead of embedding their widgets;
-- if analytics/forms are added, document data categories, processor, retention, consent/legal basis, and deletion/contact path;
-- never publish personal phone, address, or email without owner approval.
+- the privacy page identifies JRSphere as the site/contact-data owner and Web3Forms as the form processor;
+- disclose the submitted fields, purpose, recipient email, provider processing location, provider-stated log retention, contact route, and that users may email directly instead;
+- do not collect form consent through a preselected checkbox; use concise just-in-time notice and obtain legal review if consent is selected as the legal basis;
+- never reuse inquiry details for marketing without separate notice and a valid basis;
+- never publish personal phone, address, or email without owner approval; `jrsphere.jrs@gmail.com` is explicitly approved for v1 publication.
 
 ### 14.3 Failure behavior
 
@@ -1250,7 +1317,7 @@ The estimates assume one experienced frontend developer with timely owner review
 
 **Tasks**
 
-- resolve D-01 through D-10;
+- resolve or formally accept the implementation defaults for D-01 through D-12;
 - confirm audiences, primary action, URL, and legal brand name;
 - inventory and verify all copy, links, claims, and assets;
 - identify privacy/legal needs;
@@ -1325,7 +1392,7 @@ All visible copy is approved or clearly marked as release-blocking in a non-prod
 - generate sitemap with correct base path;
 - implement 404 page;
 - verify script-disabled, failed-image, and fallback-font behavior;
-- add privacy page only if required by chosen integrations.
+- add the required Web3Forms privacy page and noindex inquiry-success page.
 
 **Gate G4: crawler/share readiness**
 
@@ -1451,13 +1518,15 @@ Use these as epics/stories. IDs provide traceability to acceptance criteria.
 6. Primary hero CTA reaches Contact.
 7. Work navigation is absent when project data is empty.
 8. Every rendered project’s available links have meaningful names and valid URLs.
-9. Contact action has the approved target.
-10. 404 page links back to the base path.
-11. No local URL appears in canonical, sitemap, or social metadata in production output.
-12. Page remains usable with JavaScript disabled.
-13. No horizontal overflow at 320px and common test widths.
-14. Light and dark/system themes maintain readable states.
-15. axe reports no serious or critical violations in default and opened-menu states.
+9. Contact form has the reviewed Web3Forms action, required named fields, privacy link, botcheck field, configured key, and approved direct-email fallback.
+10. Form validation is accessible; mocked success, provider failure, rate-limit, and offline states preserve a usable fallback without sending real test inquiries.
+11. Privacy and thanks pages load at the configured base path; thanks and 404 are noindex.
+12. 404 page links back to the base path.
+13. No local URL appears in canonical, sitemap, redirect target, or social metadata in production output.
+14. Page and fallback contact route remain usable with JavaScript disabled.
+15. No horizontal overflow at 320px and common test widths.
+16. Light and dark/system themes maintain readable states.
+17. axe reports no serious or critical violations in default, opened-menu, and form-error states.
 
 ### 19.3 Viewport matrix
 
@@ -1543,10 +1612,13 @@ The website is accepted only when every applicable item below is checked, or a d
 - [ ] Section order and navigation match the approved information architecture.
 - [ ] All required copy is approved and proofread.
 - [ ] Every claim, metric, client name, and testimonial is verified and authorized.
+- [ ] JRSphere Office Platform displays its approved status without implying unverified production use or completion.
+- [ ] Any experience shown to academic or hiring evaluators names the relevant person and states truthful role, dates, responsibilities, and evidence.
 - [ ] No placeholder, lorem ipsum, guessed contact detail, or draft marker is public.
 - [ ] All visible external links are approved and working.
 - [ ] Optional empty sections and navigation links are omitted cleanly.
-- [ ] Contact path works and has a tested fallback.
+- [ ] Web3Forms inquiry works in production and direct email remains a visible, tested fallback.
+- [ ] The privacy notice accurately describes the selected form fields, processor, processing location, provider-stated retention, and contact route.
 
 ### 21.2 Responsive and visual
 
@@ -1637,7 +1709,7 @@ Known exceptions:
 | R-02 | GitHub project base path breaks assets/links | Medium | High | Central base config; production-like `/website/` E2E test |
 | R-03 | Visual effects increase JS/media cost | Medium | Medium | Strict budgets and progressive enhancement review |
 | R-04 | Unverified claims damage trust | Medium | High | Content truth rule and owner sign-off |
-| R-05 | Third-party form creates privacy/reliability issues | Medium | High | Email default; provider/privacy review and fallback |
+| R-05 | Web3Forms creates privacy, spam, or availability concerns | Medium | High | Minimal fields, privacy notice, botcheck, production test, provider-state handling, and always-visible email fallback |
 | R-06 | Automated accessibility tests create false confidence | High | High | Mandatory manual keyboard, zoom, and screen-reader matrix |
 | R-07 | Custom domain change damages indexing | Low | High | Coordinated URL/canonical/sitemap release plan |
 | R-08 | Dependency upgrades break build | Medium | Medium | Lockfile, CI, grouped automated PRs, reviewed majors |
@@ -1654,13 +1726,15 @@ Maintain this table during delivery. Do not erase superseded decisions; mark the
 |---|---|---|---|---|
 | ADR-001 | Use Astro static output with strict TypeScript | Proposed | Minimal JS, static Pages compatibility, typed content, future route support | 2026-09-29 |
 | ADR-002 | Keep v1 content in typed repository modules | Proposed | Low update frequency; avoids CMS cost and attack surface | 2026-09-29 |
-| ADR-003 | Deploy through GitHub Actions to GitHub Pages | Proposed | Auditable/reproducible deployment; no committed build output | 2026-09-29 |
-| ADR-004 | Treat `/website` as default production base | Proposed | Repository is a GitHub project site | 2026-09-29 |
-| ADR-005 | Use direct email as default contact path | Proposed | Works without backend, cookies, or processor | 2026-09-29 |
+| ADR-003 | Deploy through GitHub Actions to GitHub Pages | Accepted | Auditable/reproducible deployment; no committed build output | 2026-09-29 |
+| ADR-004 | Treat `/website` as default production base | Accepted | Owner selected the initial GitHub project site | 2026-09-29 |
+| ADR-005 | Use Web3Forms with a direct-email fallback | Accepted with activation gate | Static-hosting fit; form access key and privacy approval are still required | 2026-09-29 |
 | ADR-006 | Ship no analytics by default | Proposed | Privacy, performance, and scope minimization | 2026-09-29 |
-| ADR-007 | Brand subject: individual/studio/company | Open | Owner input required | — |
-| ADR-008 | Production domain | Open | Owner input required | — |
-| ADR-009 | Theme strategy | Open | Owner input required | — |
+| ADR-007 | Present JRSphere as a hybrid product-and-services company | Accepted | Owner confirmed company identity and hybrid positioning | 2026-09-29 |
+| ADR-008 | Serve clients, hiring teams, and academic admissions evaluators | Accepted | Owner confirmed all three audiences | 2026-09-29 |
+| ADR-009 | Follow system light/dark preference | Proposed | Accessible default with no client persistence required | 2026-09-29 |
+| ADR-010 | Represent project ownership as collective while attributing individual evidence by person | Accepted with content gate | Owner rejected a sole-owner model; public contributor names, roles, and dates remain required for individual academic evidence | 2026-09-29 |
+| ADR-011 | Describe JRSphere Office Platform as privately deployed | Accepted | Owner confirmed deployment but stated it is not public | 2026-09-29 |
 
 ---
 
