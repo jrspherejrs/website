@@ -2,7 +2,7 @@
 
 > **Status:** Implementation-ready blueprint  
 > **Version:** 1.0.0  
-> **Repository:** `jrspherejrs/demo`  
+> **Repository:** `jrspherejrs/website`
 > **Target hosting:** GitHub Pages  
 > **Primary delivery model:** Statically generated, content-led website  
 > **Quality target:** WCAG 2.2 AA, excellent Core Web Vitals, repeatable zero-touch deployment
@@ -60,7 +60,7 @@ Unless separately approved, version 1 does **not** include:
 | ID | Assumption | Implementation consequence |
 |---|---|---|
 | A-01 | JRSphere is a professional developer/technology brand or portfolio. | Use a focused professional single-page experience with case-study-ready content. |
-| A-02 | The first production URL is a GitHub **project** site. | Default base path is `/demo/`, not `/`. |
+| A-02 | The first production URL is a GitHub **project** site. | Default base path is `/website/`, not `/`. |
 | A-03 | The site is primarily English. | Set `lang="en"`; additional languages require a separate localization plan. |
 | A-04 | Most content changes are occasional and made through Git. | Keep typed local content in the repository; no CMS in v1. |
 | A-05 | There is no backend. | Contact uses direct email/social links or an approved third-party form endpoint. |
@@ -75,7 +75,7 @@ Record each decision in Section 24.
 |---|---|---|---|
 | D-01 | Brand subject | Individual / studio / company | Individual professional brand |
 | D-02 | Primary conversion | Email / project inquiry form / booking link | Email |
-| D-03 | Production URL | `https://jrspherejrs.github.io/demo/` / custom domain | GitHub project URL |
+| D-03 | Production URL | `https://jrspherejrs.github.io/website/` / custom domain | GitHub project URL |
 | D-04 | Public contact details | Approved email and social/profile links | Publish no guessed details |
 | D-05 | Sections | Approve the v1 information architecture in Section 5 | Use all core sections |
 | D-06 | Case studies | 2–4 approved projects with verifiable facts | Hide Work section until content exists |
@@ -162,12 +162,12 @@ Only begin these after all v1 acceptance criteria pass:
 
 | Route | Purpose | Indexing | Priority |
 |---|---|---:|---:|
-| `/demo/` | Main website and all v1 content | Index | P0 |
-| `/demo/404.html` | Branded not-found recovery | Noindex | P0 |
-| `/demo/privacy/` | Add only if analytics or a form creates a need | Index or noindex per legal review | P2 |
-| `/demo/work/[slug]/` | Future detailed case study | Index when complete | P2 |
+| `/website/` | Main website and all v1 content | Index | P0 |
+| `/website/404.html` | Branded not-found recovery | Noindex | P0 |
+| `/website/privacy/` | Add only if analytics or a form creates a need | Index or noindex per legal review | P2 |
+| `/website/work/[slug]/` | Future detailed case study | Index when complete | P2 |
 
-If a custom domain is adopted, replace `/demo/` with `/` through configuration. No source template should hard-code either deployment path.
+If a custom domain is adopted, replace `/website/` with `/` through configuration. No source template should hard-code either deployment path.
 
 ### 5.2 Main-page section order
 
@@ -730,7 +730,7 @@ Use environment variables only for public build configuration:
 | Variable | Required | Example | Rule |
 |---|---:|---|---|
 | `PUBLIC_SITE_URL` | Production only | `https://jrspherejrs.github.io` | Origin, no trailing slash |
-| `PUBLIC_BASE_PATH` | Yes | `/demo` | Empty string for custom-domain root; leading slash, no trailing slash |
+| `PUBLIC_BASE_PATH` | Yes | `/website` | Empty string for custom-domain root; leading slash, no trailing slash |
 | `PUBLIC_CONTACT_ENDPOINT` | Conditional | Provider URL | Public by definition; never contains a secret |
 
 Astro configuration concept:
@@ -740,7 +740,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 const site = process.env.PUBLIC_SITE_URL ?? 'https://jrspherejrs.github.io';
-const base = process.env.PUBLIC_BASE_PATH ?? '/demo';
+const base = process.env.PUBLIC_BASE_PATH ?? '/website';
 
 export default defineConfig({
   site,
@@ -759,7 +759,7 @@ Confirm Astro’s exact current configuration API during scaffolding. The invari
 - Canonical and Open Graph URLs are absolute production URLs.
 - Internal navigation preserves the configured base path.
 - Fragment links target unique IDs.
-- Test production output from a local server mounted at `/demo/`, not only at `/`.
+- Test production output from a local server mounted at `/website/`, not only at `/`.
 
 ### 9.6 Dependency rules
 
@@ -888,7 +888,7 @@ Rules:
 - generate sitemap entries from canonical production routes;
 - do not include `404.html`, drafts, or noindex pages;
 - a root-domain `robots.txt` can advertise the sitemap;
-- on a GitHub project site, remember `robots.txt` is origin-root scoped and may be controlled by the owner site. Do not assume `/demo/robots.txt` controls crawling;
+- on a GitHub project site, remember `robots.txt` is origin-root scoped and may be controlled by the owner site. Do not assume `/website/robots.txt` controls crawling;
 - verify the generated sitemap URLs include the project base path.
 
 ### 11.5 Search release checks
@@ -1143,7 +1143,7 @@ jobs:
       - run: npm run build
         env:
           PUBLIC_SITE_URL: https://jrspherejrs.github.io
-          PUBLIC_BASE_PATH: /demo
+          PUBLIC_BASE_PATH: /website
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
@@ -1405,7 +1405,7 @@ Use these as epics/stories. IDs provide traceability to acceptance criteria.
 | ID | Story | Depends on | Done evidence |
 |---|---|---|---|
 | ARC-01 | Scaffold static Astro/TypeScript application | G0 | Clean build and local preview |
-| ARC-02 | Configure base-path-safe routing and assets | ARC-01, D-03 | `/demo/` production-like test passes |
+| ARC-02 | Configure base-path-safe routing and assets | ARC-01, D-03 | `/website/` production-like test passes |
 | ARC-03 | Add typed content models and validation | ARC-01 | Invalid content fails CI clearly |
 | DS-01 | Implement color/type/spacing tokens | ARC-01 | Contrast and responsive review |
 | DS-02 | Implement layout primitives and controls | DS-01 | Component review at narrow/wide widths |
@@ -1601,7 +1601,7 @@ The website is accepted only when every applicable item below is checked, or a d
 ### 21.7 Deployment and handover
 
 - [ ] GitHub Pages serves the exact reviewed commit over HTTPS.
-- [ ] All CSS, JavaScript, media, fragments, and 404 behavior work below `/demo/` or the approved base.
+- [ ] All CSS, JavaScript, media, fragments, and 404 behavior work below `/website/` or the approved base.
 - [ ] Production metadata uses the final origin.
 - [ ] Deployment and rollback have both been documented; rollback steps are understood.
 - [ ] README explains setup, commands, architecture, content edits, and deployment.
@@ -1634,7 +1634,7 @@ Known exceptions:
 | ID | Risk | Probability | Impact | Mitigation |
 |---|---|---:|---:|---|
 | R-01 | Approved content arrives late | High | High | Content gate in Phase 0; use typed templates privately, never public placeholders |
-| R-02 | GitHub project base path breaks assets/links | Medium | High | Central base config; production-like `/demo/` E2E test |
+| R-02 | GitHub project base path breaks assets/links | Medium | High | Central base config; production-like `/website/` E2E test |
 | R-03 | Visual effects increase JS/media cost | Medium | Medium | Strict budgets and progressive enhancement review |
 | R-04 | Unverified claims damage trust | Medium | High | Content truth rule and owner sign-off |
 | R-05 | Third-party form creates privacy/reliability issues | Medium | High | Email default; provider/privacy review and fallback |
@@ -1655,7 +1655,7 @@ Maintain this table during delivery. Do not erase superseded decisions; mark the
 | ADR-001 | Use Astro static output with strict TypeScript | Proposed | Minimal JS, static Pages compatibility, typed content, future route support | 2026-09-29 |
 | ADR-002 | Keep v1 content in typed repository modules | Proposed | Low update frequency; avoids CMS cost and attack surface | 2026-09-29 |
 | ADR-003 | Deploy through GitHub Actions to GitHub Pages | Proposed | Auditable/reproducible deployment; no committed build output | 2026-09-29 |
-| ADR-004 | Treat `/demo` as default production base | Proposed | Repository is a GitHub project site | 2026-09-29 |
+| ADR-004 | Treat `/website` as default production base | Proposed | Repository is a GitHub project site | 2026-09-29 |
 | ADR-005 | Use direct email as default contact path | Proposed | Works without backend, cookies, or processor | 2026-09-29 |
 | ADR-006 | Ship no analytics by default | Proposed | Privacy, performance, and scope minimization | 2026-09-29 |
 | ADR-007 | Brand subject: individual/studio/company | Open | Owner input required | — |
@@ -1685,7 +1685,7 @@ A single CI command may orchestrate these, but the individual commands remain av
 
 ### 25.1 Local production-path test
 
-The implementation must document one command that serves the generated project exactly as GitHub Pages will, including `/demo/`. A root-only preview is not sufficient evidence for deployment readiness.
+The implementation must document one command that serves the generated project exactly as GitHub Pages will, including `/website/`. A root-only preview is not sufficient evidence for deployment readiness.
 
 ---
 
