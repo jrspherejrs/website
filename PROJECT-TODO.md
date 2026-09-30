@@ -152,8 +152,8 @@ None. All approved work is committed and pushed to the session branch.
 
 ### Delivery
 
-- [ ] Add pull-request CI.
-- [ ] Add GitHub Pages deployment workflow.
+- [x] Add pull-request CI.
+- [x] Add GitHub Pages deployment workflow.
 - [ ] Configure repository Pages source.
 - [ ] Deploy from `main`.
 - [ ] Verify production assets under `/website/`.
@@ -167,4 +167,4 @@ None. All approved work is committed and pushed to the session branch.
 
 1. Complete official HTML and CSS validation from a network-capable environment.
 2. Complete manual accessibility, browser, and Lighthouse checks.
-3. Prepare and review CI and GitHub Pages deployment workflows.
+3. Review the release gate and GitHub Pages repository settings.
