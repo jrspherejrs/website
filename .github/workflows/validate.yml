@@ -19,3 +19,6 @@ jobs:
 
       - name: Validate static site
         run: python3 scripts/validate-site.py
+
+      - name: Validate navigation JavaScript
+        run: node --check assets/js/navigation.js

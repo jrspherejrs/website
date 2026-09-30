@@ -83,7 +83,16 @@
     <header class="site-header">
       <div class="container site-header__inner">
         <a class="wordmark" href="./" aria-label="JRSphere home">JRSphere</a>
-        <nav aria-label="Primary navigation">
+        <button
+          class="nav-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="primary-navigation"
+          hidden
+        >
+          Menu
+        </button>
+        <nav id="primary-navigation" aria-label="Primary navigation">
           <ul class="nav-list" role="list">
             <li><a href="#about">About</a></li>
             <li><a href="#expertise">Expertise</a></li>
@@ -216,7 +225,7 @@
             <h2 id="process-title">A clear path from idea to improvement</h2>
           </div>
 
-          <ol class="process-list">
+          <ol class="process-list" role="list">
             <li class="stack">
               <h3>Discover</h3>
               <p>Clarify goals, users, constraints, evidence, and success measures.</p>
@@ -297,5 +306,6 @@
         <a href="#top">Back to top</a>
       </div>
     </footer>
+    <script src="assets/js/navigation.js" defer></script>
   </body>
 </html>

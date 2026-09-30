@@ -131,10 +131,12 @@ for path, document in documents.items():
     duplicates = sorted({item for item in document.ids if document.ids.count(item) > 1})
     check(not duplicates, f"{path}: duplicate IDs: {duplicates}")
     check(all("alt" in image for image in document.images), f"{path}: image without alt attribute")
-    check(all(not script.get("src") for script in document.scripts), f"{path}: executable script source found")
+    script_sources = [script.get("src") for script in document.scripts if script.get("src")]
+    expected_sources = ["assets/js/navigation.js"] if path == Path("index.html") else []
+    check(script_sources == expected_sources, f"{path}: unexpected executable script source")
     check(
-        all(script.get("type") == "application/ld+json" for script in document.scripts),
-        f"{path}: non-JSON script found",
+        all(script.get("src") or script.get("type") == "application/ld+json" for script in document.scripts),
+        f"{path}: unexpected inline executable script found",
     )
 
     robots = [item.get("content") for item in document.meta if item.get("name") == "robots"]

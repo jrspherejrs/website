@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
@@ -12,8 +16,10 @@ html {
 body,
 h1,
 h2,
+h3,
 p,
-ul {
+ul,
+ol {
   margin: 0;
 }
 

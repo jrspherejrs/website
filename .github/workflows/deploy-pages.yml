@@ -23,6 +23,9 @@ jobs:
       - name: Validate static site
         run: python3 scripts/validate-site.py
 
+      - name: Validate navigation JavaScript
+        run: node --check assets/js/navigation.js
+
       - name: Enforce release indexing gate
         run: |
           if grep -Fq '<meta name="robots" content="noindex, nofollow">' index.html; then
