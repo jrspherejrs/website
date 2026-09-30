@@ -136,8 +136,8 @@ None. All approved work is committed and pushed to the session branch.
 ### Quality assurance
 
 - [-] Development-only package tooling not required; package-free QA approved.
-- [ ] Validate HTML5.
-- [ ] Validate CSS.
+- [x] Validate HTML5; zero W3C Nu errors and reviewed list-role advisories.
+- [x] Validate CSS; zero W3C CSS errors and reviewed advisory warnings.
 - [-] Vanilla JavaScript not introduced.
 - [x] Check internal links and fragments.
 - [ ] Test keyboard navigation.
@@ -165,6 +165,6 @@ None. All approved work is committed and pushed to the session branch.
 
 ## Next recommended action
 
-1. Complete official HTML and CSS validation from a network-capable environment.
-2. Complete manual accessibility, browser, and Lighthouse checks.
+1. Complete manual accessibility, browser, and Lighthouse checks.
+2. Complete the final copy review.
 3. Review the release gate and GitHub Pages repository settings.
