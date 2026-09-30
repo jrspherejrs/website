@@ -140,7 +140,7 @@ None. All approved work is committed and pushed to the session branch.
 - [x] Validate CSS; zero W3C CSS errors and reviewed advisory warnings.
 - [-] Vanilla JavaScript not introduced.
 - [x] Check internal links and fragments.
-- [ ] Test keyboard navigation.
+- [x] Test keyboard navigation.
 - [ ] Test screen-reader structure.
 - [ ] Test 200% text resizing.
 - [ ] Test 400% zoom and reflow.
@@ -165,6 +165,6 @@ None. All approved work is committed and pushed to the session branch.
 
 ## Next recommended action
 
-1. Complete manual accessibility, browser, and Lighthouse checks.
-2. Complete the final copy review.
-3. Review the release gate and GitHub Pages repository settings.
+1. Test screen-reader structure, 200% text sizing, and 400% zoom/reflow.
+2. Test forced-colors, reduced-motion, and supported browsers.
+3. Run Lighthouse and confirm performance budgets.
