@@ -10,7 +10,7 @@
   --color-brand-strong: #004eeb;
   --color-accent: #067a9b;
   --color-border: #d0d5dd;
-  --color-focus: #ffbf47;
+  --color-focus: #004eeb;
   --color-on-brand: #ffffff;
 
   --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
@@ -54,7 +54,7 @@
     --color-brand-strong: #b2ccff;
     --color-accent: #67e3f9;
     --color-border: #344054;
-    --color-focus: #ffbf47;
+    --color-focus: #67e3f9;
     --color-on-brand: #081120;
     --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
     --shadow-md: 0 1rem 2.5rem rgb(0 0 0 / 0.35);
